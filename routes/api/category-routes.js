@@ -15,6 +15,7 @@ router.get('/', (req, res) => {
   .then((allCategories) => {
     res.json(allCategories);
   })
+  .catch((error) => res.json(error))
 
 });
 
@@ -22,12 +23,23 @@ router.get('/:id', (req, res) => {
   // find one category by its `id` value
   // be sure to include its associated Products
   Category.findByPk(req.params.id, {
-    includes: ['Products']
+    includes: {
+        model: Product
+    }
   })
+  .then((categoryById) => {
+    res.json(categoryById);
+  })
+  .catch((error) => res.json(error))
 });
 
 router.post('/', (req, res) => {
   // create a new category
+  Category.create(req.body)
+  .then((newCategory) => {
+    res.json(newCategory);
+  })
+  .catch((error) => res.json(error))
 });
 
 router.put('/:id', (req, res) => {
