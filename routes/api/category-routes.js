@@ -23,8 +23,8 @@ router.get('/:id', (req, res) => {
   // find one category by its `id` value
   // be sure to include its associated Products
   Category.findByPk(req.params.id, {
-    includes: {
-        model: Product
+    include: {
+      model: Product
     }
   })
   .then((categoryById) => {
@@ -44,10 +44,33 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
+  Category.update(
+    {
+      category_name: req.body.category_name
+    },
+    {
+      where: {
+        id: req.params.id,
+      }
+    }
+  )
+  .then((updatedCategory) => {
+    res.json(updatedCategory);
+  })
+  .catch((error) => res.json(error))
 });
 
 router.delete('/:id', (req, res) => {
   // delete a category by its `id` value
+  Category.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+  .then((deletedCategory) => {
+    res.json(deletedCategory);
+  })
+  .catch((error) => res.json(error))
 });
 
 module.exports = router;
